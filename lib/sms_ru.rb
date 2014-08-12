@@ -44,11 +44,11 @@ module SmsRu
     new_phone = ::SmsRu::convert_phone(phone)
     return ::SmsRu::ArgumentError.new("Неверный формат телефона: #{phone}") unless new_phone
 
-    res = ::SmsRu::Base.sms_send(@auth_params, phone, msg, opts)
+    res = ::SmsRu::Base.sms_send(get_auth_params, phone, msg, opts)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.sms_send(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.sms_send(get_auth_params, phone, msg, opts)
 
     end
 
@@ -60,11 +60,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.sms_state(@auth_params, msg_id)
+    res = ::SmsRu::Base.sms_state(get_auth_params, msg_id)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.sms_state(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.sms_state(get_auth_params, phone, msg, opts)
 
     end
 
@@ -76,11 +76,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.sms_cost(@auth_params, phone, msg)
+    res = ::SmsRu::Base.sms_cost(get_auth_params, phone, msg)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.sms_cost(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.sms_cost(get_auth_params, phone, msg, opts)
 
     end
 
@@ -92,11 +92,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.balance(@auth_params)
+    res = ::SmsRu::Base.balance(get_auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.balance(@auth_params)
+      res = ::SmsRu::Base.balance(get_auth_params)
 
     end
 
@@ -108,11 +108,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.limit(@auth_params)
+    res = ::SmsRu::Base.limit(get_auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.limit(@auth_params)
+      res = ::SmsRu::Base.limit(get_auth_params)
 
     end
 
@@ -124,11 +124,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.check(@auth_params)
+    res = ::SmsRu::Base.check(get_auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.check(@auth_params)
+      res = ::SmsRu::Base.check(get_auth_params)
 
     end
 
@@ -201,6 +201,10 @@ module SmsRu
   end # convert_phone
 
   private
+
+  def get_auth_params
+    @auth_params || {}
+  end # get_auth_params
 
   def reconnect?(res)
     res.is_a?(::SmsRu::SessionExpiredError) || res.is_a?(::SmsRu::AuthError)
