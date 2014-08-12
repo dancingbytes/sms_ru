@@ -22,7 +22,7 @@ module SmsRu
   # 1 -- user and password
   # 2 -- password and token
   # 3 -- password, token and api_id
-  AUTH_LEVEL  = 0.freeze
+  AUTH_LEVEL  = 2.freeze
 
   PHONE_RE    = /\A(\+7|7|8)(\d{10})\Z/.freeze
   TITLE_SMS   = nil # "Anlas.ru".freeze
@@ -222,7 +222,7 @@ module SmsRu
       # password, token
       when 2 then
 
-        token = SmsRu::Respond.get_token
+        token = SmsRu::Base.get_token
         return {} if ::SmsRu.error?(token)
 
         {
@@ -234,7 +234,7 @@ module SmsRu
       # password, token, api_id
       when 3 then
 
-        token = SmsRu::Respond.get_token
+        token = SmsRu::Base.get_token
         return {} if ::SmsRu.error?(token)
 
         {
