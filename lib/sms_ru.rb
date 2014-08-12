@@ -64,7 +64,7 @@ module SmsRu
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.sms_state(get_auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.sms_state(get_auth_params, msg_id)
 
     end
 
@@ -80,7 +80,7 @@ module SmsRu
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.sms_cost(get_auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.sms_cost(get_auth_params, phone, msg)
 
     end
 
