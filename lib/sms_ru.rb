@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'nokogiri'
 require 'net/http'
 require 'digest/sha2'
 require 'timeout'
@@ -25,14 +24,14 @@ module SmsRu
   AUTH_LEVEL  = 2.freeze
 
   PHONE_RE    = /\A(\+7|7|8)(\d{10})\Z/.freeze
-  TITLE_SMS   = nil # "Anlas.ru".freeze
+  TITLE_SMS   = "Anlas.ru".freeze
 
-  def login(usr, pass, api_id)
+  def login(usr, pass, api_id, level = ::SmsRu::AUTH_LEVEL)
 
     @usr          = usr
     @pass         = pass
     @api_id       = api_id
-    @auth_params  = auth_params_for(usr, pass, api_id)
+    @auth_params  = auth_params_for(usr, pass, api_id, level)
 
     self
 
@@ -61,7 +60,7 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.sms_state(@usr, @pass, @api_id, msg_id)
+    res = ::SmsRu::Base.sms_state(@auth_params, msg_id)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
@@ -93,11 +92,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.balance(@usr, @pass, @api_id)
+    res = ::SmsRu::Base.balance(@auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.balance(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.balance(@auth_params)
 
     end
 
@@ -109,11 +108,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.limit(@usr, @pass, @api_id)
+    res = ::SmsRu::Base.limit(@auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.limit(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.limit(@auth_params)
 
     end
 
@@ -125,11 +124,11 @@ module SmsRu
 
     return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
-    res = ::SmsRu::Base.check(@usr, @pass, @api_id)
+    res = ::SmsRu::Base.check(@auth_params)
     if reconnect?(res)
 
       login(@usr, @pass, @api_id)
-      res = ::SmsRu::Base.check(@auth_params, phone, msg, opts)
+      res = ::SmsRu::Base.check(@auth_params)
 
     end
 
@@ -207,7 +206,7 @@ module SmsRu
     res.is_a?(::SmsRu::SessionExpiredError) || res.is_a?(::SmsRu::AuthError)
   end # reconnect?
 
-  def auth_params_for(usr, pass, api_id, level = ::SmsRu::AUTH_LEVEL)
+  def auth_params_for(usr, pass, api_id, level)
 
     case level
 
@@ -227,8 +226,8 @@ module SmsRu
 
         {
           login:    usr,
-          token:    @token,
-          sha512:   ::Digest::SHA2.hexdigest("#{pass}#{@token}", 512)
+          token:    token,
+          sha512:   ::Digest::SHA2.hexdigest("#{pass}#{token}", 512)
         }
 
       # password, token, api_id
@@ -239,8 +238,8 @@ module SmsRu
 
         {
           login:    usr,
-          token:    @token,
-          sha512:   ::Digest::SHA2.hexdigest("#{pass}#{@token}#{api_id}", 512)
+          token:    token,
+          sha512:   ::Digest::SHA2.hexdigest("#{pass}#{token}#{api_id}", 512)
         }
 
       # apy_id

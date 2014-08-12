@@ -2,6 +2,9 @@ Sms_ru
 =======
 
 
+SmsRu.login('login', 'password', 'api_key')
+SmsRu.message('79630000001', 'Привет')
+
 ### License
 
 Author: Tyralion (piliaiev@gmail.com)
