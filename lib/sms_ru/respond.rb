@@ -67,11 +67,7 @@ module SmsRu
     def balance(req)
 
       server_error(req) || answer(req.body) { |money, _|
-
-        {
-          balance: money
-        }
-
+        money
       }
 
     end # balance
