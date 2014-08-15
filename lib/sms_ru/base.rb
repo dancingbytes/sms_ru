@@ -85,7 +85,7 @@ module SmsRu
 
     end # sms_state
 
-    def sms_cost(usr, pass, api_id, phone, msg)
+    def sms_cost(auth_params, phone, msg)
 
       r = auth_params.merge({
 
@@ -114,7 +114,7 @@ module SmsRu
 
     end # sms_cost
 
-    def balance(usr, pass, api_id)
+    def balance(auth_params)
 
       r     = auth_params.merge({})
       r     = params_for(r)
@@ -137,7 +137,7 @@ module SmsRu
 
     end # balance
 
-    def limit(usr, pass, api_id)
+    def limit(auth_params)
 
       r     = auth_params.merge({})
       r     = params_for(r)
@@ -160,7 +160,7 @@ module SmsRu
 
     end # limit
 
-    def check(usr, pass, api_id)
+    def check(auth_params)
 
       r     = auth_params.merge({})
       r     = params_for(r)

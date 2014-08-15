@@ -58,8 +58,6 @@ module SmsRu
 
   def state(msg_id)
 
-    return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
-
     res = ::SmsRu::Base.sms_state(get_auth_params, msg_id)
     if reconnect?(res)
 
@@ -73,8 +71,6 @@ module SmsRu
   end # state
 
   def cost(phone, msg)
-
-    return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
     res = ::SmsRu::Base.sms_cost(get_auth_params, phone, msg)
     if reconnect?(res)
@@ -90,8 +86,6 @@ module SmsRu
 
   def balance
 
-    return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
-
     res = ::SmsRu::Base.balance(get_auth_params)
     if reconnect?(res)
 
@@ -106,8 +100,6 @@ module SmsRu
 
   def limit
 
-    return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
-
     res = ::SmsRu::Base.limit(get_auth_params)
     if reconnect?(res)
 
@@ -121,8 +113,6 @@ module SmsRu
   end # limit
 
   def check
-
-    return ::SmsRu::InactiveError.new("Работа смс остановлена") unless self.active?
 
     res = ::SmsRu::Base.check(get_auth_params)
     if reconnect?(res)
