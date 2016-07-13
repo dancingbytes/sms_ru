@@ -23,7 +23,7 @@ module SmsRu
   # 3 -- password, token and api_id
   AUTH_LEVEL  = 2.freeze
 
-  PHONE_RE    = /\A(\+7|7|8)(\d{10})\Z/.freeze
+  PHONE_RE    = /\A(\+7|7|8){0,1}(\d{10})\Z/.freeze
   TITLE_SMS   = "Anlas.ru".freeze
 
   def login(usr, pass, api_id, level = ::SmsRu::AUTH_LEVEL)
