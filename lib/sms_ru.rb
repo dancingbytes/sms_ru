@@ -21,7 +21,7 @@ module SmsRu
   # 1 -- user and password
   # 2 -- password and token
   # 3 -- password, token and api_id
-  AUTH_LEVEL  = 2.freeze
+  AUTH_LEVEL  = 0.freeze
 
   PHONE_RE    = /\A(\+7|7|8){0,1}(\d{10})\Z/.freeze
   TITLE_SMS   = "Anlas.ru".freeze
@@ -251,4 +251,3 @@ end # SmsRu
 
 require 'sms_ru/respond'
 require 'sms_ru/base'
-
